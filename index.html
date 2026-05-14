@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELISA·SPR 바이오분석 실무교육 | 재능대학교 K-하이테크플랫폼사업단</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #10b99e;
+    --primary-dark: #0d8f7d;
+    --primary-dim: rgba(16,185,158,0.15);
+    --primary-border: rgba(16,185,158,0.3);
+    --accent: #f59e0b;
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #1c2330;
+    --ink: #e6edf3;
+    --ink-mid: #b0bec5;
+    --ink-soft: #768390;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.05);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px;
+    background: rgba(13,17,23,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; }
+  .nav-logo-badge {
+    background: var(--primary); color: #0d1117;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; font-weight: 700;
+    padding: 4px 10px; border-radius: 4px; letter-spacing: 0.06em;
+  }
+  .nav-logo-text { font-size: 13px; font-weight: 500; color: var(--ink-mid); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--ink-soft); transition: color 0.15s; }
+  .nav-links a:hover { color: var(--primary); }
+  .nav-cta {
+    background: var(--primary); color: #0d1117;
+    padding: 8px 20px; border-radius: 6px;
+    font-size: 13px; font-weight: 700;
+    transition: background 0.15s; white-space: nowrap;
+  }
+  .nav-cta:hover { background: #0dd4b8; }
+
+  /* ── HERO ── */
+  .hero-outer { max-width: 1196px; margin: 0 auto; }
+  .hero {
+    padding: 120px 48px 80px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center; min-height: 100vh;
+  }
+  .hero-free-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(245,158,11,0.15); color: #f59e0b;
+    border: 1px solid rgba(245,158,11,0.3);
+    font-size: 12px; font-weight: 700;
+    padding: 5px 12px; border-radius: 100px; margin-bottom: 14px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--primary-dim); color: var(--primary);
+    border: 1px solid var(--primary-border);
+    font-size: 11px; font-weight: 600;
+    padding: 6px 14px; border-radius: 100px;
+    margin-bottom: 24px; letter-spacing: 0.04em;
+  }
+  .hero-eyebrow-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--primary);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
+
+  .hero-title {
+    font-size: clamp(34px, 4.2vw, 58px); font-weight: 900;
+    line-height: 1.12; letter-spacing: -0.025em;
+    color: var(--ink); margin-bottom: 20px;
+  }
+  .hero-title .hl { color: var(--primary); }
+  .hero-desc {
+    font-size: 15px; line-height: 1.85; color: var(--ink-soft);
+    margin-bottom: 36px; max-width: 480px;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--primary); color: #0d1117;
+    padding: 13px 28px; border-radius: 8px;
+    font-size: 14px; font-weight: 700;
+    transition: background 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary:hover { background: #0dd4b8; }
+  .btn-secondary {
+    background: transparent; color: var(--ink);
+    padding: 13px 28px; border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    border: 1.5px solid var(--border);
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+  .hero-stats {
+    display: flex; gap: 28px; margin-top: 40px;
+    padding-top: 32px; border-top: 1px solid var(--border);
+  }
+  .stat-val { font-size: 28px; font-weight: 900; color: var(--primary); letter-spacing: -0.03em; line-height: 1; }
+  .stat-label { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+  .stat-div { width: 1px; background: var(--border); align-self: stretch; }
+
+  /* HERO VISUAL */
+  .hero-visual {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .plate-hdr { display: flex; justify-content: space-between; align-items: center; }
+  .plate-lbl { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-soft); letter-spacing: 0.1em; }
+  .plate-live { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--primary); }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); animation: pulse 1.6s infinite; }
+  .well-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; }
+  .well { aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,0.04); position: relative; overflow: hidden; }
+  .well::after { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--wc, rgba(255,255,255,0.03)); }
+  .ws1{--wc:rgba(16,185,158,0.92)} .ws2{--wc:rgba(16,185,158,0.65)} .ws3{--wc:rgba(16,185,158,0.42)}
+  .ws4{--wc:rgba(16,185,158,0.24)} .ws5{--wc:rgba(16,185,158,0.12)} .ws6{--wc:rgba(16,185,158,0.05)}
+  .wsp{--wc:rgba(245,158,11,0.7)}
+  .curve-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px;
+  }
+  .curve-lbl { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--ink-soft); letter-spacing: 0.1em; margin-bottom: 10px; }
+  .curve-svg { width: 100%; height: 64px; }
+  .plate-kpi { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .kpi { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; }
+  .kpi-val { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--primary); font-weight: 500; }
+  .kpi-key { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--ink-soft); letter-spacing: 0.08em; margin-top: 3px; }
+
+  /* OPS STRIP */
+  .ops-strip {
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 18px 48px; background: var(--bg2);
+    display: flex; align-items: center; gap: 48px;
+  }
+  .ops-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-soft); letter-spacing: 0.1em; white-space: nowrap; }
+  .ops-items { display: flex; gap: 32px; flex-wrap: wrap; }
+  .ops-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink-mid); }
+
+  /* SECTION WRAP */
+  .swrap { padding: 88px 0; }
+  .swrap.alt { background: var(--bg2); }
+  .inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+
+  .eyebrow {
+    font-size: 11px; font-weight: 700; color: var(--primary);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  }
+  .eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--primary); display: inline-block; }
+  .stitle { font-size: clamp(26px, 3vw, 40px); font-weight: 900; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 16px; color: var(--ink); }
+  .slead { font-size: 15px; color: var(--ink-soft); line-height: 1.8; max-width: 560px; }
+
+  /* FEATURES */
+  .feat-grid {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; margin-top: 48px;
+  }
+  .feat-card {
+    background: var(--bg); padding: 32px 28px;
+    transition: background 0.2s;
+  }
+  .swrap.alt .feat-card { background: var(--bg2); }
+  .feat-card:hover { background: var(--bg3); }
+  .feat-icon { font-size: 26px; margin-bottom: 14px; display: block; }
+  .feat-badge { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--primary); letter-spacing: 0.1em; margin-bottom: 8px; display: block; }
+  .feat-name { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--ink); }
+  .feat-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.7; }
+
+  /* COURSES */
+  .course-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px; }
+  .course-card {
+    border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    background: var(--bg2);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .course-card:hover { box-shadow: 0 8px 32px rgba(16,185,158,0.1); border-color: var(--primary-border); }
+  .course-head { padding: 24px 24px 20px; border-bottom: 1px solid var(--border); }
+  .course-num {
+    font-family: 'DM Mono', monospace; font-size: 11px; color: var(--primary);
+    letter-spacing: 0.1em; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cnb {
+    background: var(--primary); color: #0d1117;
+    width: 22px; height: 22px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .course-name { font-size: 20px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 6px; color: var(--ink); }
+  .course-sub { font-size: 12px; color: var(--ink-soft); margin-bottom: 10px; }
+  .course-dur {
+    display: inline-flex; align-items: center;
+    background: var(--primary-dim); color: var(--primary);
+    border: 1px solid var(--primary-border);
+    font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px;
+  }
+  .course-body { padding: 20px 24px 24px; }
+  .course-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.75; margin-bottom: 18px; }
+  .course-list { list-style: none; }
+  .course-list li {
+    font-size: 13px; color: var(--ink-mid); padding: 8px 0;
+    border-bottom: 1px solid var(--border2);
+    display: flex; gap: 8px; align-items: flex-start; line-height: 1.5;
+  }
+  .course-list li:last-child { border-bottom: none; }
+  .course-list li::before { content: '→'; color: var(--primary); font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+
+  /* SIMULATOR INFO (chat 제거, 기능 설명만) */
+  .sim-feats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+  .sim-feat {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+    display: flex; gap: 16px; align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+  .sim-feat:hover { border-color: var(--primary-border); }
+  .sim-feat-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--primary-dim); border: 1px solid var(--primary-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .sim-feat-name { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+  .sim-feat-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
+
+  /* EFFECTS */
+  .eff-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px; }
+  .eff-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px 24px;
+    transition: border-color 0.2s;
+  }
+  .eff-card:hover { border-color: var(--primary-border); }
+  .eff-num { font-family: 'DM Mono', monospace; font-size: 28px; color: var(--primary); opacity: 0.3; margin-bottom: 12px; line-height: 1; }
+  .eff-text { font-size: 14px; line-height: 1.75; color: var(--ink-mid); }
+
+  /* TARGET */
+  .target-inner { display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: start; margin-top: 48px; }
+  .target-list { list-style: none; }
+  .target-list li {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 0; border-bottom: 1px solid var(--border2);
+    font-size: 14px; color: var(--ink-mid);
+  }
+  .chk {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--primary-dim); color: var(--primary);
+    border: 1px solid var(--primary-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 900; flex-shrink: 0;
+  }
+  .sub-card {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 14px; padding: 36px;
+  }
+  .sub-ey { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.12em; margin-bottom: 14px; }
+  .sub-title { font-size: 22px; font-weight: 900; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 14px; line-height: 1.3; }
+  .sub-desc { font-size: 13px; line-height: 1.8; color: var(--ink-soft); margin-bottom: 24px; }
+  .sub-list { list-style: none; }
+  .sub-list li {
+    font-size: 13px; color: var(--ink-mid); padding: 9px 0;
+    border-bottom: 1px solid var(--border2);
+    display: flex; gap: 10px; align-items: center;
+  }
+  .sub-list li::before { content: '✓'; color: var(--primary); font-size: 12px; font-weight: 900; flex-shrink: 0; }
+
+  /* CONTACT */
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .con-cards { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+  .con-card {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 22px;
+    display: flex; gap: 14px; align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+  .con-card:hover { border-color: var(--primary-border); }
+  .con-icon { font-size: 20px; }
+  .con-key { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--ink-soft); letter-spacing: 0.12em; margin-bottom: 5px; }
+  .con-val { font-size: 14px; color: var(--ink); font-weight: 500; }
+  .con-val a { color: var(--primary); }
+  .con-val a:hover { text-decoration: underline; }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .foot-org { font-size: 12px; color: var(--ink-soft); }
+  .foot-copy { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-soft); opacity: 0.5; }
+
+  /* ANIM */
+  .fu { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fu.vis { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; min-height: auto; }
+    .hero-visual { display: none; }
+    .inner { padding: 0 24px; }
+    .feat-grid { grid-template-columns: 1fr; }
+    .course-grid { grid-template-columns: 1fr; }
+    .sim-feats { grid-template-columns: 1fr; }
+    .eff-grid { grid-template-columns: 1fr 1fr; }
+    .target-inner { grid-template-columns: 1fr; gap: 32px; }
+    .contact-inner { grid-template-columns: 1fr; gap: 36px; }
+    footer { flex-direction: column; gap: 12px; align-items: flex-start; padding: 28px 24px; }
+    .ops-strip { padding: 18px 24px; flex-direction: column; gap: 14px; align-items: flex-start; }
+  }
+  @media (max-width: 640px) {
+    .eff-grid { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; }
+    .hero-stats { flex-wrap: wrap; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-badge">KHP-ELISA</div>
+    <div class="nav-logo-text">바이오분석 실무교육</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#features">교육특징</a></li>
+    <li><a href="#courses">교육과정</a></li>
+    <li><a href="#simulator">AI 시뮬레이터</a></li>
+    <li><a href="#target">모집대상</a></li>
+    <li><a href="#contact">문의·신청</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">교육 신청 문의 →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero-outer">
+  <div class="hero">
+    <div class="fu">
+      <div class="hero-free-badge">🎓 재직자 환급과정 · 교육비 무료</div>
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        BIOANALYSIS PRACTICAL TRAINING PROGRAM
+      </div>
+      <h1 class="hero-title">
+        ELISA · SPR<br>
+        <span class="hl">바이오분석</span><br>
+        실무교육
+      </h1>
+      <p class="hero-desc">바이오의약품, 체외진단, 바이오센서, 품질분석 분야에서 활용되는 ELISA 및 SPR 기반 바이오분석 실무교육 프로그램입니다. 현장 이론교육과 장비 실습 후, AI 복습 시뮬레이터로 반복 학습이 가능합니다.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">📋 교육 신청 문의하기</a>
+        <a href="#courses" class="btn-secondary">교육과정 보기</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-val">3</div><div class="stat-label">교육 코스</div></div>
+        <div class="stat-div"></div>
+        <div class="stat"><div class="stat-val">₩0</div><div class="stat-label">수강료 (환급과정)</div></div>
+        <div class="stat-div"></div>
+        <div class="stat"><div class="stat-val">AI</div><div class="stat-label">복습 시뮬레이터 제공</div></div>
+      </div>
+    </div>
+    <div class="hero-visual fu">
+      <div class="plate-hdr">
+        <div class="plate-lbl">96-WELL ELISA PLATE · ANALYSIS</div>
+        <div class="plate-live"><div class="live-dot"></div>READING</div>
+      </div>
+      <div class="well-grid">
+        <div class="well ws1"></div><div class="well ws1"></div><div class="well ws2"></div><div class="well ws2"></div><div class="well ws3"></div><div class="well ws3"></div><div class="well ws4"></div><div class="well ws4"></div><div class="well ws5"></div><div class="well ws5"></div><div class="well ws6"></div><div class="well"></div>
+        <div class="well ws1"></div><div class="well ws1"></div><div class="well ws2"></div><div class="well ws2"></div><div class="well ws3"></div><div class="well ws3"></div><div class="well ws4"></div><div class="well ws4"></div><div class="well ws5"></div><div class="well ws5"></div><div class="well ws6"></div><div class="well"></div>
+        <div class="well wsp"></div><div class="well wsp"></div><div class="well wsp"></div><div class="well wsp"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div>
+        <div class="well wsp"></div><div class="well wsp"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div>
+        <div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div>
+        <div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div>
+        <div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div>
+        <div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div><div class="well"></div>
+      </div>
+      <div class="curve-box">
+        <div class="curve-lbl">4-PL STANDARD CURVE · R² = 0.9987</div>
+        <svg class="curve-svg" viewBox="0 0 300 64" preserveAspectRatio="none">
+          <path d="M10,58 C35,55 60,48 90,36 C118,24 145,13 185,8 C220,4 255,4 290,4" stroke="#10b99e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M10,58 C35,55 60,48 90,36 C118,24 145,13 185,8 C220,4 255,4 290,4 L290,62 L10,62Z" fill="rgba(16,185,158,0.07)"/>
+          <circle cx="20" cy="57" r="2.5" fill="#10b99e"/><circle cx="55" cy="50" r="2.5" fill="#10b99e"/>
+          <circle cx="100" cy="32" r="2.5" fill="#10b99e"/><circle cx="150" cy="12" r="2.5" fill="#10b99e"/>
+          <circle cx="210" cy="6" r="2.5" fill="#10b99e"/><circle cx="265" cy="4" r="2.5" fill="#10b99e"/>
+          <line x1="150" y1="0" x2="150" y2="64" stroke="rgba(245,158,11,0.5)" stroke-width="1" stroke-dasharray="3,3"/>
+          <circle cx="150" cy="12" r="4" fill="#f59e0b" stroke="#0d1117" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="plate-kpi">
+        <div class="kpi"><div class="kpi-val">0.9987</div><div class="kpi-key">R² VALUE</div></div>
+        <div class="kpi"><div class="kpi-val">2.3 pg/mL</div><div class="kpi-key">LOD</div></div>
+        <div class="kpi"><div class="kpi-val">4-PL</div><div class="kpi-key">CURVE FIT</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPS STRIP -->
+<div class="ops-strip">
+  <div class="ops-label">OPERATED BY</div>
+  <div class="ops-items">
+    <div class="ops-item"><span>🏫</span> 재능대학교 바이오테크과</div>
+    <div class="ops-item"><span>🔬</span> AI-바이오분석특화연구소</div>
+    <div class="ops-item"><span>⚙️</span> K-하이테크플랫폼사업단</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="swrap alt" id="features">
+  <div class="inner fu">
+    <div class="eyebrow">교육 특징</div>
+    <h2 class="stitle">현장 중심 집중 실습</h2>
+    <p class="slead">단순 이론 강의를 넘어, 실제 바이오·진단 현장에서 즉시 활용 가능한 실무 역량을 키웁니다.</p>
+    <div class="feat-grid">
+      <div class="feat-card fu"><span class="feat-icon">🧪</span><span class="feat-badge">HANDS-ON</span><div class="feat-name">실무 중심 장비 실습</div><div class="feat-desc">실제 ELISA Reader, SPR 장비를 직접 운용하며 현장형 실무교육을 진행합니다.</div></div>
+      <div class="feat-card fu"><span class="feat-icon">📊</span><span class="feat-badge">DATA ANALYSIS</span><div class="feat-name">데이터 해석 중심</div><div class="feat-desc">표준곡선, sensorgram, kinetics 데이터를 직접 해석하며 분석 역량을 내재화합니다.</div></div>
+      <div class="feat-card fu"><span class="feat-icon">🤖</span><span class="feat-badge">AI REVIEW</span><div class="feat-name">AI 복습 시뮬레이터 제공</div><div class="feat-desc">수료 후에도 AI 시뮬레이터를 통해 자기주도형 반복 학습이 가능합니다.</div></div>
+      <div class="feat-card fu"><span class="feat-icon">💰</span><span class="feat-badge">FREE</span><div class="feat-name">재직자 환급과정 — 교육비 무료</div><div class="feat-desc">고용보험 가입 재직자 대상 환급과정으로 운영되어 수강료 부담 없이 수강 가능합니다.</div></div>
+      <div class="feat-card fu"><span class="feat-icon">🔗</span><span class="feat-badge">INTEGRATED</span><div class="feat-name">ELISA–SPR 연계 교육</div><div class="feat-desc">endpoint 정량분석과 real-time 결합역학을 연계하여 통합적 해석 능력을 기릅니다.</div></div>
+      <div class="feat-card fu"><span class="feat-icon">📜</span><span class="feat-badge">CERTIFIED</span><div class="feat-name">품질분석 직무 연계</div><div class="feat-desc">바이오의약품, 체외진단, 바이오센서, 품질관리 분야 직무역량과 직접 연결됩니다.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COURSES -->
+<div class="swrap" id="courses">
+  <div class="inner fu">
+    <div class="eyebrow">교육과정</div>
+    <h2 class="stitle">3단계 실무 커리큘럼</h2>
+    <p class="slead">ELISA 기초부터 SPR 심화, ELISA–SPR 연계 Kinetics 분석까지 단계별로 체계적으로 습득합니다.</p>
+    <div class="course-grid">
+      <div class="course-card fu">
+        <div class="course-head">
+          <div class="course-num"><div class="cnb">1</div>COURSE 01</div>
+          <div class="course-name">ELISA 기본교육</div>
+          <div class="course-sub">효소면역측정법 기초 실무 훈련</div>
+          <div class="course-dur">⏱ 1일 과정</div>
+        </div>
+        <div class="course-body">
+          <p class="course-desc">ELISA의 원리부터 표준곡선 작성, 미지시료 정량분석, 실험 트러블슈팅까지 학습하는 기초 실무과정입니다.</p>
+          <ul class="course-list">
+            <li>ELISA 원리 및 항원–항체 면역반응</li>
+            <li>Sandwich / Direct / Indirect / Competitive ELISA 비교</li>
+            <li>표준곡선 작성 (Linear, 4-PL, 5-PL Curve fitting)</li>
+            <li>LOD, LOQ 계산 및 미지시료 농도 분석</li>
+            <li>파이펫팅, Washing 트러블슈팅</li>
+            <li>실습: Indirect ELISA (Chicken IgG)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="course-card fu">
+        <div class="course-head">
+          <div class="course-num"><div class="cnb">2</div>COURSE 02</div>
+          <div class="course-name">SPR 기본교육</div>
+          <div class="course-sub">실시간 바이오분자 상호작용 분석</div>
+          <div class="course-dur">⏱ 1일 과정</div>
+        </div>
+        <div class="course-body">
+          <p class="course-desc">SPR의 원리와 sensorgram 해석, 항원–항체 결합반응 분석을 학습하는 실시간 바이오분석 실무과정입니다.</p>
+          <ul class="course-list">
+            <li>SPR 원리 및 Surface Plasmon Resonance 개념</li>
+            <li>Label-free 실시간 분석 원리</li>
+            <li>Sensor chip 표면 고정화 개념</li>
+            <li>Association / Dissociation 구간 해석</li>
+            <li>Affinity 및 Kinetics 분석 개념</li>
+            <li>실습: KD, kon, koff 기본 개념 실습</li>
+          </ul>
+        </div>
+      </div>
+      <div class="course-card fu">
+        <div class="course-head">
+          <div class="course-num"><div class="cnb">3</div>COURSE 03</div>
+          <div class="course-name">연계 정량 및 Kinetics</div>
+          <div class="course-sub">ELISA–SPR 통합 바이오마커 분석</div>
+          <div class="course-dur">⏱ 심화 과정</div>
+        </div>
+        <div class="course-body">
+          <p class="course-desc">ELISA endpoint 정량분석과 SPR real-time 결합역학을 연계하여 바이오마커 분석 결과를 통합 해석하는 심화과정입니다.</p>
+          <ul class="course-list">
+            <li>ELISA vs SPR: endpoint 정량 vs real-time kinetics</li>
+            <li>정량성·특이성·결합특성 상호 검증 전략</li>
+            <li>실습: CRP 검출 ELISA–SPR 비교 실험</li>
+            <li>kon, koff, KD 산출 및 비교 분석</li>
+            <li>ELISA R²·CV%, SPR chi²·residual plot 확인</li>
+            <li>통합 해석 보고서 작성</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI SIMULATOR (기능 설명, 챗 UI 없음) -->
+<div class="swrap alt" id="simulator">
+  <div class="inner fu">
+    <div class="eyebrow">AI REVIEW SIMULATOR</div>
+    <h2 class="stitle">교육 후에도 반복 학습</h2>
+    <p class="slead">모든 수료자에게 AI 기반 복습 시뮬레이터를 제공합니다. 실험 단계 복습부터 데이터 해석 연습까지, 자기주도형 반복 학습을 지원합니다.</p>
+    <div class="sim-feats">
+      <div class="sim-feat fu">
+        <div class="sim-feat-icon">🧪</div>
+        <div><div class="sim-feat-name">ELISA 실험 단계별 복습</div><div class="sim-feat-desc">코팅–세척–항체반응–기질반응–측정까지 전 과정을 단계별로 시뮬레이션합니다.</div></div>
+      </div>
+      <div class="sim-feat fu">
+        <div class="sim-feat-icon">📈</div>
+        <div><div class="sim-feat-name">표준곡선 작성 및 농도 계산 연습</div><div class="sim-feat-desc">4-PL curve fitting, LOD/LOQ 계산, 미지시료 정량 분석을 반복 실습합니다.</div></div>
+      </div>
+      <div class="sim-feat fu">
+        <div class="sim-feat-icon">⚡</div>
+        <div><div class="sim-feat-name">SPR Sensorgram 해석 연습</div><div class="sim-feat-desc">association/dissociation 구간 해석, kon·koff·KD 산출 및 결합역학 이해를 훈련합니다.</div></div>
+      </div>
+      <div class="sim-feat fu">
+        <div class="sim-feat-icon">🔧</div>
+        <div><div class="sim-feat-name">실험 오류 트러블슈팅 시뮬레이션</div><div class="sim-feat-desc">흡광도 이상, baseline drift, 비특이 결합, 재현성 문제 등의 대응 전략을 연습합니다.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EFFECTS -->
+<div class="swrap" id="effects">
+  <div class="inner fu">
+    <div class="eyebrow">기대 효과</div>
+    <h2 class="stitle">수료 후 달라지는 것들</h2>
+    <p class="slead">ELISA와 SPR 기반 바이오분석 전반의 실무 역량을 체계적으로 내재화합니다.</p>
+    <div class="eff-grid">
+      <div class="eff-card fu"><div class="eff-num">01</div><div class="eff-text">ELISA 기반 바이오마커 정량분석 역량 확보 및 현장 즉시 적용</div></div>
+      <div class="eff-card fu"><div class="eff-num">02</div><div class="eff-text">SPR 기반 실시간 결합반응 분석, kon·koff·KD 해석 능력 내재화</div></div>
+      <div class="eff-card fu"><div class="eff-num">03</div><div class="eff-text">표준곡선 및 kinetics 데이터 해석 능력 강화, 품질분석 직무 실전 대응</div></div>
+      <div class="eff-card fu"><div class="eff-num">04</div><div class="eff-text">항체·항원 반응 기반 분석 원리 이해, 바이오분석 직무 이해도 상승</div></div>
+      <div class="eff-card fu"><div class="eff-num">05</div><div class="eff-text">체외진단·바이오센서 분야 실무 적응력 향상, 신속한 현장 투입 가능</div></div>
+      <div class="eff-card fu"><div class="eff-num">06</div><div class="eff-text">AI 시뮬레이터를 통한 자기주도 반복 학습으로 교육 효과 장기 유지</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TARGET -->
+<div class="swrap alt" id="target">
+  <div class="inner fu">
+    <div class="eyebrow">모집 대상</div>
+    <h2 class="stitle">이런 분들을 위한 과정입니다</h2>
+    <p class="slead">바이오·제약·의료기기·진단 분야 종사자라면 누구나 신청 가능합니다.</p>
+    <div class="target-inner">
+      <div>
+        <ul class="target-list">
+          <li><div class="chk">✓</div>바이오·제약·의료기기 분야 재직자</li>
+          <li><div class="chk">✓</div>바이오분석 및 품질분석 담당자</li>
+          <li><div class="chk">✓</div>체외진단·바이오센서 분야 연구자</li>
+          <li><div class="chk">✓</div>바이오분석 직무 취업 준비생</li>
+          <li><div class="chk">✓</div>ELISA·SPR 장비 활용 역량이 필요한 연구자</li>
+        </ul>
+      </div>
+      <div class="sub-card">
+        <div class="sub-ey">GOVERNMENT SUBSIDY PROGRAM</div>
+        <div class="sub-title">재직자 환급과정<br>교육비 무료 지원</div>
+        <p class="sub-desc">고용보험 가입 재직자라면 교육비 환급 혜택을 받을 수 있습니다. 별도 비용 부담 없이 수강 가능합니다.</p>
+        <ul class="sub-list">
+          <li>고용보험 가입 재직자 지원 대상</li>
+          <li>교육비 무료 지원 가능</li>
+          <li>현장 실습 중심 운영</li>
+          <li>교육 종료 후 AI 복습 시뮬레이터 제공</li>
+          <li>환급 가능 여부 및 세부 조건은 신청 시 별도 안내</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="swrap" id="contact">
+  <div class="inner">
+    <div class="contact-inner">
+      <div class="fu">
+        <div class="eyebrow">문의 · 신청</div>
+        <h2 class="stitle">지금 바로<br>신청하세요</h2>
+        <p style="font-size:14px;color:var(--ink-soft);line-height:1.8;margin-top:16px;">교육 신청, 일정 협의, 환급과정 관련 문의는 아래 채널을 통해 연락 주시기 바랍니다. 바이오분석 교육운영팀이 신속히 안내드립니다.</p>
+      </div>
+      <div class="con-cards fu">
+        <div class="con-card"><div class="con-icon">📧</div><div><div class="con-key">EMAIL</div><div class="con-val"><a href="mailto:namjh@jeiu.ac.kr">namjh@jeiu.ac.kr</a></div></div></div>
+        <div class="con-card"><div class="con-icon">📍</div><div><div class="con-key">LOCATION</div><div class="con-val">재능대학교 K-하이테크플랫폼사업단<br>바이오분석 실습교육실</div></div></div>
+        <div class="con-card"><div class="con-icon">🏛️</div><div><div class="con-key">OPERATION</div><div class="con-val">오프라인 현장교육 + 실습<br>+ AI 복습 시뮬레이터</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="foot-org">재능대학교 바이오테크과 · AI-바이오분석특화연구소 · K-하이테크플랫폼사업단</div>
+    <div class="foot-org" style="margin-top:4px;opacity:0.5">JEI University · Dept. of Biotechnology · Incheon, Korea</div>
+  </div>
+  <div class="foot-copy">© 2025 KHP-ELISA Program</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.07 });
+
+  document.querySelectorAll('.fu').forEach(el => io.observe(el));
+
+  document.querySelectorAll('.feat-card, .course-card, .eff-card, .sim-feat').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 3) * 70}ms`;
+  });
+
+  setTimeout(() => document.querySelectorAll('.hero .fu').forEach(el => el.classList.add('vis')), 150);
+</script>
+</body>
+</html>
